@@ -85,15 +85,12 @@
                fixed>
       <v-toolbar-title style="width: 240px; cursor:pointer" class="ml-0 pl-3" @click="goIndex">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        web-development
+        web development
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon large>
-        <v-avatar size="32px" tile>
-        </v-avatar>
-      </v-btn>
+      <v-toolbar-title style="cursor:pointer" @click="LogOut">退出登录</v-toolbar-title>
     </v-toolbar>
 
     <v-content>
@@ -116,8 +113,8 @@
 
 
 <script>
-  import { mapGetters } from 'vuex'
-
+  import { mapGetters, mapActions } from 'vuex'
+  import * as messageAction from '../store/message/action-types.js'
   export default {
     data () {
       return {
@@ -131,13 +128,28 @@
       }
     },
     created () {
+      // if (!this.isAuthenticated) {
+      //   this.$router.push({name: 'login'})
+      // }
     },
     computed: {
-      ...mapGetters(['snackBar'])
+      ...mapGetters({
+        profile: 'getProfile',
+        isAuthenticated: 'getAuthenticated',
+        snackBar: 'snackBar'
+      })
     },
     methods: {
+      ...mapActions({
+        showSnackBar: messageAction.SHOW_SNACK_BAR,
+        logout: 'logout'
+      }),
       goIndex () {
         this.$router.push({name: 'Main'})
+      },
+      LogOut () {
+        this.logout()
+        this.$router.push({name: 'login'})
       }
     }
   }

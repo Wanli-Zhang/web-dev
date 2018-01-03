@@ -2,7 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 import Vue from 'vue'
-
+import Vuex from 'vuex'
+import VueCookie from 'vue-cookie'
 import {
   Vuetify,
   VApp,
@@ -24,7 +25,9 @@ import {
   VCheckbox,
   VMenu,
   VTabs,
-  VToolTip
+  VToolTip,
+  VForm,
+  VSelect
 } from 'vuetify'
 import './stylus/main.styl'
 
@@ -54,9 +57,13 @@ Vue.use(Vuetify, {
     VCheckbox,
     VMenu,
     VTabs,
-    VToolTip
+    VToolTip,
+    VForm,
+    VSelect
   }
 })
+Vue.use(Vuex)
+Vue.use(VueCookie)
 
 Vue.config.productionTip = false
 

@@ -5,9 +5,11 @@ Vue.use(Vuex)
 
 // Modules
 import message from './message'
+import userInfo from './userInfo'
 
 export default new Vuex.Store({
   modules: {
-    message
+    message,
+    userInfo
   }
 })
