@@ -34,14 +34,14 @@
         <v-layout hidden-sm-and-up  column justify-center>
           <v-layout column>
             <v-form action="uaa/login" method="post">
-              <v-text-field name="username" label="账号" v-model="user.username"/>
+              <v-text-field name="username" label="账号" v-model="user.username"></v-text-field>
               <v-text-field type="password" name="password" ref="password-mobile" label="密码" v-model="user.password"
                             :rules="[() => !loginError || ('登录失败，请尝试\'忘记密码\'')]"
                             :error="loginError"
                             :append-icon="eyeOn ? 'visibility_off' : 'visibility'"
                             :append-icon-cb="()=>(eyeOn = !eyeOn)"
                             :type="eyeOn ? 'text' : 'password'"
-              />
+              ></v-text-field>
               <input type="hidden" name="_csrf" v-model="csrf"/>
 
               <v-layout column>

@@ -109,7 +109,30 @@
       <span> {{new Date(create_time).toLocaleString()}} </span>
       <br/>
 
-      <v-btn class="primary">修改密码</v-btn>
+      <v-dialog v-model="dialog" persistent max-width="400px">
+        <v-btn slot="activator" outline color="primary" block>修改密码</v-btn>
+        <v-card>
+          <v-card-title>
+            <span class="headline">修改密码</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field label="新密码" required v-model="password1"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="再次输入" required v-model="password2"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" outline @click="submit" :disabled="!valid" block>确认</v-btn>
+            <v-btn flat @click="dialog=false" block>取消</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -130,7 +153,11 @@
         nameTemp: '',
         phoneTemp: '',
         addressTemp: '',
-        kindTemp: ''
+        kindTemp: '',
+        dialog: false,
+        password1: '',
+        password2: '',
+        valid: false
       }
     },
     created () {
@@ -148,6 +175,22 @@
       //   this.kind = this.profile.kind
       // }
     },
+    watch: {
+      password1: function () {
+        if (this.password1 && this.password1 === this.password2) {
+          this.valid = true
+        } else {
+          this.valid = false
+        }
+      },
+      password2: function () {
+        if (this.password2 && this.password1 === this.password2) {
+          this.valid = true
+        } else {
+          this.valid = false
+        }
+      }
+    },
     computed: {
       ...mapGetters({
         profile: 'getProfile',
@@ -159,6 +202,40 @@
       ...mapActions({
         showSnackBar: messageAction.SHOW_SNACK_BAR
       }),
+      submit () {
+        if (this.password1.length < 8) {
+          this.showSnackBar({
+            text: '密码至少8位',
+            context: 'error',
+            show: true
+          })
+        } else if (this.password1.match(/^[A-Z]*$/g)) {
+          this.showSnackBar({
+            text: '密码不能全为大写',
+            context: 'error',
+            show: true
+          })
+        } else if (this.password1.match(/^[a-z]*$/g)) {
+          this.showSnackBar({
+            text: '密码不能全为小写',
+            context: 'error',
+            show: true
+          })
+        } else if (!this.password1.match(/[0-9].*[0-9]/g)) {
+          this.showSnackBar({
+            text: '密码需包含一位以上数字',
+            context: 'error',
+            show: true
+          })
+        } else {
+          this.dialog = false
+          this.showSnackBar({
+            text: '修改成功',
+            context: 'success',
+            show: true
+          })
+        }
+      },
       toLevel () {
         if (this.role === 'customer') {
           if (this.level === 0) {
