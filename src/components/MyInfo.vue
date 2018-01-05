@@ -143,13 +143,12 @@
   export default {
     data () {
       return {
-        name: 'zwl',
-        level: 1,
-        phone: 12345678901,
-        address: 'fffffuck',
-        create_time: new Date().getTime(),
-        kind: 'fffff',
-        role: 'merchant',
+        name: '',
+        level: '',
+        phone: '',
+        address: '',
+        create_time: '',
+        kind: '',
         nameTemp: '',
         phoneTemp: '',
         addressTemp: '',
@@ -164,16 +163,16 @@
       if (this.role === 'administrator') {
         return
       }
-      // this.name = this.profile.name
-      // this.level = this.profile.level
-      // this.phone = this.profile.phone
-      // this.create_time = this.profile.create_time * 1000
-      // if (this.role === 'customer') {
-      //   this.address = this.profile.address
-      // }
-      // if (this.role === 'merchant') {
-      //   this.kind = this.profile.kind
-      // }
+      this.name = this.profile.name
+      this.level = this.profile.level
+      this.phone = this.profile.phone
+      this.create_time = this.profile.create_time
+      if (this.role === 'customer') {
+        this.address = this.profile.address
+      }
+      if (this.role === 'merchant') {
+        this.kind = this.profile.kind
+      }
     },
     watch: {
       password1: function () {
@@ -194,8 +193,8 @@
     computed: {
       ...mapGetters({
         profile: 'getProfile',
-        username: 'getUsername'
-        // role: 'getRole'
+        username: 'getUsername',
+        role: 'getRole'
       })
     },
     methods: {
@@ -228,11 +227,17 @@
             show: true
           })
         } else {
-          this.dialog = false
-          this.showSnackBar({
-            text: '修改成功',
-            context: 'success',
-            show: true
+          this.axios.put(`/${this.role}/${this.username}`, {
+            password: this.password1
+          }).then((res) => {
+            if (res.data.err_code === 0) {
+              this.dialog = false
+              this.showSnackBar({
+                text: '修改成功',
+                context: 'success',
+                show: true
+              })
+            }
           })
         }
       },

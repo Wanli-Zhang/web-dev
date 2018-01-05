@@ -3,9 +3,16 @@ import Vue from 'vue'
 export default{
   state: {
     Authenticated: false,
-    role: null,
+    role: 'customer',
     username: 'myusername',
-    profile: {}
+    profile: {
+      name: 'zwl',
+      level: 1,
+      phone: 12345678901,
+      address: 'fffffuck',
+      create_time: new Date().getTime(),
+      kind: 'fffff'
+    }
   },
   getters: {
     getProfile: (state) => {
