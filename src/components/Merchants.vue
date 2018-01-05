@@ -56,6 +56,7 @@
   export default {
     data () {
       return {
+        // 表格的头部
         headers: [
           {text: '名称', value: 'name', align: 'left'},
           {text: '级别', value: 'level', align: 'left'},
@@ -64,6 +65,7 @@
           {text: '创建时间', value: 'create_time', align: 'left'},
           {text: '交易', sortable: false, align: 'left'}
         ],
+        // 表格的底部的页码
         pagination: {
           rowsPerPage: -1,
           sortBy: 'level',
@@ -77,6 +79,7 @@
       // this.fetchMerchants()
     },
     computed: {
+      // 去/store获取信息
       ...mapGetters({
         merchants: 'getMerchants',
         username: 'getUsername'
