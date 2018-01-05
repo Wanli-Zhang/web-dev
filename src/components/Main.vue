@@ -96,10 +96,9 @@
     <v-content>
       <v-container fluid>
         <v-snackbar
-          :timeout="1000"
+          :timeout="3000"
           :top="true"
-          :success="snackBar.context === 'success'"
-          :error="snackBar.context === 'error'"
+          :color="snackBar.context"
           v-model="snackBar.show">
           {{ snackBar.text }}
           <v-btn dark flat @click.native="snackBar.show = false">关闭</v-btn>

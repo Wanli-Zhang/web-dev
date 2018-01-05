@@ -103,14 +103,20 @@
             this.showSnackBar({
               text: '交易成功',
               context: 'success',
-              show: 'true'
+              show: true
+            })
+          } else {
+            this.showSnackBar({
+              text: res.data.err_msg,
+              context: 'error',
+              show: true
             })
           }
         }, () => {
-          this.showSackBar({
+          this.showSnackBar({
             text: '交易失败',
             context: 'error',
-            show: 'true'
+            show: true
           })
         })
       }
