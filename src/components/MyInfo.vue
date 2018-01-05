@@ -55,6 +55,7 @@
       <br/>
 
       <v-edit-dialog
+        v-if="role==='customer'"
         @open="addressTemp=address"
         @save="editAddress(addressTemp)"
         large
@@ -74,7 +75,30 @@
           autofocux>
         </v-text-field>
       </v-edit-dialog>
-      <span class="mr-5"> {{address}} </span>
+      <span class="mr-5" v-if="role==='customer'"> {{address}} </span>
+
+      <v-edit-dialog
+        v-if="role==='merchant'"
+        @open="kindTemp=kind"
+        @save="editKind(kindTemp)"
+        large
+        lazy>
+        <v-tooltip top v-if="kind">
+          <v-btn icon slot="activator">
+            <v-icon class="grey--text">class</v-icon>
+          </v-btn>
+          <span> 商店种类 </span>
+        </v-tooltip>
+        <div slot="input" class="mt-4 title">商店种类</div>
+        <v-text-field
+          slot="input"
+          label="kind"
+          v-model="kindTemp"
+          single-line
+          autofocux>
+        </v-text-field>
+      </v-edit-dialog>
+      <span class="mr-5" v-if="role==='merchant'"> {{kind}} </span>
 
       <v-tooltip top>
         <v-btn icon slot="activator">
@@ -105,7 +129,8 @@
         role: 'merchant',
         nameTemp: '',
         phoneTemp: '',
-        addressTemp: ''
+        addressTemp: '',
+        kindTemp: ''
       }
     },
     created () {
@@ -212,6 +237,32 @@
         }).then((res) => {
           if (res.data.err_code === 0) {
             this.address = address
+            this.showSnackBar({
+              text: '修改成功',
+              context: 'success',
+              show: true
+            })
+          } else {
+            this.showSnackBar({
+              text: res.data.err_msg,
+              context: 'error',
+              show: true
+            })
+          }
+        }, () => {
+          this.showSnackBar({
+            text: '修改失败，请重试',
+            context: 'error',
+            show: true
+          })
+        })
+      },
+      editKind (kind) {
+        this.axios.put(`/${this.role}/${this.username}`, {
+          kind: kind
+        }).then((res) => {
+          if (res.data.err_code === 0) {
+            this.kind = kind
             this.showSnackBar({
               text: '修改成功',
               context: 'success',

@@ -4,7 +4,7 @@ export default{
   state: {
     Authenticated: false,
     role: null,
-    username: 'merchant',
+    username: 'myusername',
     profile: {}
   },
   getters: {
@@ -22,7 +22,7 @@ export default{
     }
   },
   mutations: {
-    setProfile: function (state, payload) {
+    setProfile: (state, payload) => {
       state.profile = payload.profile
     },
     setAuthenticated: (state, payload) => {

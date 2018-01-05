@@ -27,7 +27,8 @@ import {
   VTabs,
   VToolTip,
   VForm,
-  VSelect
+  VSelect,
+  VDialog
 } from 'vuetify'
 import './stylus/main.styl'
 
@@ -59,7 +60,8 @@ Vue.use(Vuetify, {
     VTabs,
     VToolTip,
     VForm,
-    VSelect
+    VSelect,
+    VDialog
   }
 })
 Vue.use(Vuex)
