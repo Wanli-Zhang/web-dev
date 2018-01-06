@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import * as actionTypes from './action-types'
+import * as mutationTypes from './mutation-types'
 export default {
   state: {
     merchants: [
@@ -19,7 +20,24 @@ export default {
         kind: 'haha',
         create_time: new Date()
       }],
-    customers: []
+    customers: [
+      {
+        username: 'abcd',
+        name: 'customer1',
+        level: 1,
+        phone: '123456',
+        address: 'heihei',
+        create_time: new Date()
+      },
+      {
+        username: 'xyz',
+        name: 'customer2',
+        level: 2,
+        phone: '654321',
+        address: 'haha',
+        create_time: new Date()
+      }
+    ]
   },
   getters: {
     getMerchants: (state) => {
@@ -30,14 +48,36 @@ export default {
     }
   },
   mutations: {
-    setMerchants: (state, merchants) => {
+    [mutationTypes.SET_MERCHANTS]: (state, merchants) => {
       state.merchants = merchants
     },
-    setCustomers: (state, customers) => {
+    [mutationTypes.SET_CUSTOMERS]: (state, customers) => {
       state.customers = customers
     },
-    addMerchant: (state, merchant) => {
+    [mutationTypes.ADD_MERCHANT]: (state, merchant) => {
       state.merchants.push(merchant)
+    },
+    [mutationTypes.DELETE_MERCHANT]: (state, username) => {
+      let index = state.merchants.findIndex(merchant => merchant.username === username)
+      state.merchants.splice(index, 1)
+    },
+    [mutationTypes.UPDATE_MERCHANT]: (state, newMerchant) => {
+      let index = state.merchants.findIndex(merchant => merchant.username === newMerchant.username)
+      if (newMerchant.password) {
+        state.merchants[index].password = newMerchant.password
+      }
+      if (newMerchant.name) {
+        state.merchants[index].name = newMerchant.name
+      }
+      if (newMerchant.level != null) {
+        state.merchants[index].level = newMerchant.level
+      }
+      if (newMerchant.phone) {
+        state.merchants[index].phone = newMerchant.phone
+      }
+      if (newMerchant.kind) {
+        state.merchants[index].kind = newMerchant.kind
+      }
     }
   },
   actions: {
@@ -45,7 +85,7 @@ export default {
       return new Promise((resolve, reject) => {
         Vue.axios.get('/merchants').then(res => {
           if (res.data.err_code === 0) {
-            commit('setMerchants', res.data.data)
+            commit(mutationTypes.SET_MERCHANTS, res.data.data)
           } else {
             reject(res.data.err_msg)
           }
@@ -56,7 +96,7 @@ export default {
       return new Promise((resolve, reject) => {
         Vue.axios.get('/customers').then(res => {
           if (res.data.err_code === 0) {
-            commit('setCustomer', res.data.data)
+            commit(mutationTypes.SET_CUSTOMERS, res.data.data)
           } else {
             reject(res.data.err_msg)
           }
@@ -64,10 +104,14 @@ export default {
       })
     },
     [actionTypes.ADD_MERCHANT]: ({commit}, merchant) => {
+      merchant.create_time = new Date().getTime()// 合代码时删掉
+      commit(mutationTypes.ADD_MERCHANT, merchant) // 合代码时删掉
       return new Promise((resolve, reject) => {
         Vue.axios.post('/merchants', merchant).then(res => {
           if (res.data.err_code === 0) {
-            commit('addMerchant', merchant)
+            merchant.create_time = new Date().getTime()
+            commit(mutationTypes.ADD_MERCHANT, merchant)
+            resolve()
           } else {
             reject(res.data.err_msg)
           }
@@ -75,21 +119,25 @@ export default {
       })
     },
     [actionTypes.DELETE_MERCHANT]: ({commit}, mUsername) => {
-      return new Promise((resole, reject) => {
+      commit(mutationTypes.DELETE_MERCHANT, mUsername)// 合代码时删掉
+      return new Promise((resolve, reject) => {
         Vue.axios.delete(`/merchant/${mUsername}`).then(res => {
           if (res.data.err_code === 0) {
-            commit('deleteMerchant', mUsername)
+            commit(mutationTypes.DELETE_MERCHANT, mUsername)
+            resolve()
           } else {
             reject(res.data.err_msg)
           }
         })
       })
     },
-    [actionTypes.UPDATE_MERCHANT]: ({commit}, mUsername, merchant) => {
+    [actionTypes.UPDATE_MERCHANT]: ({commit}, merchant) => {
+      commit(mutationTypes.UPDATE_MERCHANT, merchant)// 合代码时删掉
       return new Promise((resolve, reject) => {
-        Vue.axios.put(`/merchant/${mUsername}`).then(res => {
+        Vue.axios.put(`/merchant/${merchant.username}`).then(res => {
           if (res.data.err_code === 0) {
-            commit('updateMerchant', mUsername, merchant)
+            commit(mutationTypes.UPDATE_MERCHANT, merchant)
+            resolve()
           } else {
             reject(res.data.err_msg)
           }

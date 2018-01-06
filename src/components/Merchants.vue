@@ -1,29 +1,100 @@
 <template>
   <div>
     <v-card-title>商家列表</v-card-title>
-    <v-data-table
-      v-bind:headers="headers"
-      :items="merchants"
-      :pagination.sync="pagination"
-      class="elevation-1">
+    <v-data-table v-bind:headers="headers"
+                  :items="merchants"
+                  :pagination.sync="pagination"
+                  class="elevation-1">
       <template slot="items" slot-scope="props">
         <tr>
+          <td>{{ props.item.username }}</td>
           <td>
-            {{ props.item.name }}
+            <v-edit-dialog v-if="role==='administrator'"
+                           @open="nameTmp = props.item.name"
+                           @save="editName(props.item.username)"
+                           large lazy>
+              <div>{{ props.item.name }}</div>
+              <div slot="input" class="mt-3 title">商家名称</div>
+              <v-text-field slot="input"
+                            label="商家名称"
+                            v-model="nameTmp"
+                            single-line autofocus>
+              </v-text-field>
+            </v-edit-dialog>
+            <div v-if="role==='customer'">{{ props.item.name }}</div>
           </td>
-          <td>
+
+          <td v-if="role==='administrator'"
+              @click="levelTmp=props.item.level;levelDialog=true;mUsername=props.item.username"
+              style="cursor:pointer">
+            {{ toLevel(props.item.level) }}
+            <v-dialog v-model="levelDialog"
+                      max-width="300px">
+              <v-card>
+                <v-card-title class="mt-3 title">商家级别</v-card-title>
+                <v-card-text>
+                  <v-select v-bind:items="levelItems"
+                            v-model="levelTmp"
+                            item-text="text"
+                            item-value="value">
+                  </v-select>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn flat block
+                         @click="levelDialog=false">
+                    CANCEL
+                  </v-btn>
+                  <v-btn flat color="primary" block
+                         @click.stop="levelDialog=false;editLevel()">
+                    SAVE
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </td>
+
+          <td v-if="role==='customer'">
             {{ toLevel(props.item.level) }}
           </td>
+
           <td>
-            {{ props.item.phone }}
+            <v-edit-dialog v-if="role==='administrator'"
+                           @open="phoneTmp = props.item.phone"
+                           @save="editPhone(props.item.username)"
+                           large lazy>
+              <div>{{ props.item.phone }}</div>
+              <div slot="input" class="mt-3 title">客服电话</div>
+              <v-text-field slot="input"
+                            label="客服电话"
+                            v-model="phoneTmp"
+                            single-line autofocus>
+              </v-text-field>
+            </v-edit-dialog>
+            <div v-if="role==='customer'">{{ props.item.phone }}</div>
           </td>
+
           <td>
-            {{ props.item.kind }}
+            <v-edit-dialog v-if="role==='administrator'"
+                           @open="kindTmp = props.item.kind"
+                           @save="editKind(props.item.username)"
+                           large lazy>
+              <div>{{ props.item.kind }}</div>
+              <div slot="input" class="mt-3 title">商家种类</div>
+              <v-text-field slot="input"
+                            label="商家种类"
+                            v-model="kindTmp"
+                            single-line autofocus>
+              </v-text-field>
+            </v-edit-dialog>
+            <div v-if="role==='customer'">{{ props.item.kind }}</div>
           </td>
+
           <td>
             {{ new Date(props.item.create_time).toLocaleDateString() }}
           </td>
-          <v-dialog v-model="dialog" persistent max-width="400px" v-if="role==='customer'">
+          <v-dialog v-model="dialog"
+                    max-width="400px"
+                    v-if="role==='customer'">
             <v-btn slot="activator" outline primary block>新建交易</v-btn>
             <v-card>
               <v-card-title>
@@ -33,23 +104,45 @@
                 <v-container>
                   <v-layout>
                     <v-flex xs12>
-                      <v-text-field label="支付金额" required v-model="amount"></v-text-field>
+                      <v-text-field label="支付金额" required
+                                    v-model="amount">
+                      </v-text-field>
                     </v-flex>
                   </v-layout>
                 </v-container>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="primary" outline @click="dialog=false;newTrans(props.item.username, amount)" block>确认</v-btn>
                 <v-btn flat @click="dialog=false" block>取消</v-btn>
+                <v-btn color="primary" outline block
+                       @click="dialog=false;newTrans(props.item.username, amount)">
+                  确认
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-btn color="secondary" outline @click="deleteMerchant(props.item.username)" v-if="role==='administrator'">删除</v-btn>
+          <v-btn flat block
+                 @click="delMerchant(props.item.username)"
+                 v-if="role==='administrator'">
+            <v-icon>delete</v-icon>
+            删除
+          </v-btn>
         </tr>
       </template>
+      <template slot="footer"
+                v-if="role==='administrator'">
+        <td colspan="100%">
+          <span style="color:cornflowerblue">
+            注：点击表格文字可修改商家信息
+          </span>
+        </td>
+      </template>
     </v-data-table>
-    <v-dialog v-model="dialog2" persistent max-width="400px" v-if="role==='administrator'">
-      <v-btn color="primary" outline slot="activator" center>新增商店</v-btn>
+    <v-dialog v-model="dialog2" persistent max-width="400px"
+              v-if="role==='administrator'">
+      <v-btn color="primary" outline slot="activator" block>
+        <v-icon>add</v-icon>
+        新增商店
+        </v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">新增商店</span>
@@ -114,7 +207,7 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" outline @click="newMerchant" block>确认</v-btn>
+          <v-btn color="primary" outline @click="newMerchant()" block>确认</v-btn>
           <v-btn flat @click="dialog2=false" block>取消</v-btn>
         </v-card-actions>
       </v-card>
@@ -131,18 +224,18 @@
       return {
         // 表格的头部
         headers: [
+          {text: '用户名', value: 'username', align: 'left'},
           {text: '名称', value: 'name', align: 'left'},
           {text: '级别', value: 'level', align: 'left'},
           {text: '电话号码', value: 'phone', align: 'left'},
           {text: '种类', value: 'kind', align: 'left'},
-          {text: '创建时间', value: 'create_time', align: 'left'},
-          {text: '操作', sortable: false, align: 'left'}
+          {text: '创建时间', value: 'create_time', align: 'left'}
         ],
         // 表格的底部的页码
         pagination: {
           rowsPerPage: -1,
-          sortBy: 'level',
-          descending: true
+          sortBy: 'username',
+          descending: false
         },
         levelItems: [
           { text: '小商店', value: 0 },
@@ -150,7 +243,12 @@
           { text: '旗舰商店', value: 2 }
         ],
         dialog: false,
+        levelDialog: false,
         amount: null,
+        nameTmp: '',
+        kindTmp: '',
+        phoneTmp: '',
+        levelTmp: '',
         dialog2: false,
         newUsername: '',
         newPassword: '',
@@ -159,6 +257,7 @@
         newPhone: '',
         newLevel: '',
         valid: false,
+        mUsername: '',
         usernameRules: [
           (v) => !!v || '请输入登录用户名',
           (v) => v && v.length <= 20 || '用户名不得超过20位'
@@ -185,7 +284,7 @@
       }
     },
     created () {
-      this.fetchMerchants()
+      // this.fetchMerchants()
     },
     computed: {
       // 去/store获取信息
@@ -198,7 +297,10 @@
     methods: {
       ...mapActions({
         showSnackBar: messageAction.SHOW_SNACK_BAR,
-        fetchMerchants: bizAction.FETCH_MERCHANTS
+        fetchMerchants: bizAction.FETCH_MERCHANTS,
+        addMerchant: bizAction.ADD_MERCHANT,
+        deleteMerchant: bizAction.DELETE_MERCHANT,
+        updateMerchant: bizAction.UPDATE_MERCHANT
       }),
       toLevel (level) {
         if (level === 0) {
@@ -234,21 +336,131 @@
           })
         })
       },
+      editName (mUsername) {
+        this.updateMerchant({
+          username: mUsername,
+          name: this.nameTmp
+        }).then(() => {
+          this.showSnackBar({
+            text: '修改成功',
+            context: 'success',
+            show: true
+          })
+        }, (errMsg) => {
+          this.showSnackBar({
+            text: errMsg,
+            context: 'error',
+            show: true
+          })
+        })
+      },
+      editLevel () {
+        this.updateMerchant({
+          username: this.mUsername,
+          level: this.levelTmp
+        }).then(() => {
+          this.showSnackBar({
+            text: '修改成功',
+            context: 'success',
+            show: true
+          })
+        }, (errMsg) => {
+          this.showSnackBar({
+            text: errMsg,
+            context: 'error',
+            show: true
+          })
+        })
+      },
+      editPhone (mUsername) {
+        this.updateMerchant({
+          username: mUsername,
+          phone: this.phoneTmp
+        }).then(() => {
+          this.showSnackBar({
+            text: '修改成功',
+            context: 'success',
+            show: true
+          })
+        }, (errMsg) => {
+          this.showSnackBar({
+            text: errMsg,
+            context: 'error',
+            show: true
+          })
+        })
+      },
+      editKind (mUsername) {
+        this.updateMerchant({
+          username: mUsername,
+          kind: this.kindTmp
+        }).then(() => {
+          this.showSnackBar({
+            text: '修改成功',
+            context: 'success',
+            show: true
+          })
+        }, (errMsg) => {
+          this.showSnackBar({
+            text: errMsg,
+            context: 'error',
+            show: true
+          })
+        })
+      },
       newMerchant () {
+        let self = this
+        let dupUsername = false
         if (this.$refs.form.validate()) {
+          this.merchants.forEach(function (item) {
+            if (item.username === self.newUsername) {
+              self.showSnackBar({
+                text: '用户名已存在',
+                context: 'error',
+                show: true
+              })
+              dupUsername = true
+              return
+            }
+          })
+          if (dupUsername) return
           this.dialog2 = false
-          console.log('level=' + this.newLevel.value)
-          // this.axios.post(`/merchants`, {
-          //   username: this.newUsername,
-          //   password: this.newPassword,
-          //   name: this.newName,
-          //   level: this.newLevel.value,
-          //   phone: this.newPhone,
-          //   kind: this.newKind
-          // })
-        } else {
-          console.log('!validate')
+          this.addMerchant({
+            username: this.newUsername,
+            password: this.newPassword,
+            name: this.newName,
+            level: this.newLevel,
+            phone: this.newPhone,
+            kind: this.newKind
+          }).then(() => {
+            this.showSnackBar({
+              text: '添加成功',
+              context: 'success',
+              show: true
+            })
+          }, (errMsg) => {
+            this.showSnackBar({
+              text: errMsg,
+              context: 'error',
+              show: true
+            })
+          })
         }
+      },
+      delMerchant (mUsername) {
+        this.deleteMerchant(mUsername).then(() => {
+          this.showSnackBar({
+            text: '删除成功',
+            context: 'success',
+            show: true
+          })
+        }, (errMsg) => {
+          this.showSnackBar({
+            text: errMsg,
+            context: 'error',
+            show: true
+          })
+        })
       }
     }
   }

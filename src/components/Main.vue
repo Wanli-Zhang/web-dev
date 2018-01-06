@@ -121,7 +121,8 @@
         items: [
           {text: '我的信息', icon: 'person', href: '#/myInfo', visible: 'customer|merchant'},
           {text: '商家列表', icon: 'shopping_cart', href: '#/merchants', visible: 'customer|administrator'},
-          {text: '客户列表', icon: 'people', href: '#/customers', visible: 'merchant|administrator'}
+          {text: '客户列表', icon: 'people', href: '#/customers', visible: 'merchant|administrator'},
+          {text: '管理员列表', icon: 'list', href: '#/myInfo', visible: 'administrator'}
         ],
         mini: true
       }

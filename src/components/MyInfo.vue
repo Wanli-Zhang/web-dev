@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-xs-center">
+    <div class="text-xs-left" v-if="role==='customer' || role ==='merchant'">
       <v-edit-dialog
         @open="nameTemp=name"
         @save="editName(nameTemp)"
@@ -22,6 +22,7 @@
         </v-text-field>
       </v-edit-dialog>
       <span class="mr-5"> {{name}} </span>
+      <br/>
 
       <v-tooltip top>
         <v-btn icon slot="activator">
@@ -30,6 +31,7 @@
         <span> 等级 </span>
       </v-tooltip>
       <span class="mr-5"> {{toLevel()}} </span>
+      <br/>
 
       <v-edit-dialog
         @open="phoneTemp=phone"
@@ -54,36 +56,41 @@
       <span> {{phone}} </span>
       <br/>
 
-      <v-edit-dialog
-        v-if="role==='customer'"
-        @open="addressTemp=address"
-        @save="editAddress(addressTemp)"
-        large
-        lazy>
-        <v-tooltip top v-if="address">
-          <v-btn icon slot="activator">
-            <v-icon class="grey--text">location_on</v-icon>
-          </v-btn>
-          <span> 地址 </span>
-        </v-tooltip>
-        <div slot="input" class="mt-4 title">地址</div>
-        <v-text-field
-          slot="input"
-          label="address"
-          v-model="addressTemp"
-          single-line
-          autofocux>
-        </v-text-field>
-      </v-edit-dialog>
-      <span class="mr-5" v-if="role==='customer'"> {{address}} </span>
+      <div v-if="role==='customer'">
+        <v-edit-dialog
+          @open="addressTemp=address"
+          @save="editAddress(addressTemp)"
+          large
+          lazy>
+          <v-tooltip top v-if="address">
+            <v-btn icon slot="activator">
+              <v-icon class="grey--text">location_on</v-icon>
+            </v-btn>
+            <span> 地址 </span>
+          </v-tooltip>
+          <div slot="input" class="mt-4 title">地址</div>
+          <v-text-field
+            slot="input"
+            label="address"
+            v-model="addressTemp"
+            single-line
+            autofocux>
+          </v-text-field>
+        </v-edit-dialog>
+        <span> {{address}} </span>
+        <br/>
+      </div>
 
-      <v-tooltip top v-if="kind">
-        <v-btn icon slot="activator">
-          <v-icon class="grey--text">class</v-icon>
-        </v-btn>
-        <span> 商店种类 </span>
-      </v-tooltip>
-      <span class="mr-5" v-if="role==='merchant'"> {{kind}} </span>
+      <div v-if="role==='merchant'">
+        <v-tooltip top >
+          <v-btn icon slot="activator">
+            <v-icon class="grey--text">class</v-icon>
+          </v-btn>
+          <span> 商店种类 </span>
+        </v-tooltip>
+        <span> {{kind}} </span>
+        <br/>
+      </div>
 
       <v-tooltip top>
         <v-btn icon slot="activator">
@@ -93,32 +100,31 @@
       </v-tooltip>
       <span> {{new Date(create_time).toLocaleString()}} </span>
       <br/>
-
-      <v-dialog v-model="dialog" persistent max-width="400px">
-        <v-btn slot="activator" outline color="primary" block>修改密码</v-btn>
-        <v-card>
-          <v-card-title>
-            <span class="headline">修改密码</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-layout wrap>
-                <v-flex xs12>
-                  <v-text-field label="新密码" required v-model="password1"></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="再次输入" required v-model="password2"></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" outline @click="submit" :disabled="!valid" block>确认</v-btn>
-            <v-btn flat @click="dialog=false" block>取消</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </div>
+    <v-dialog v-model="dialog" persistent max-width="400px">
+      <v-btn slot="activator" outline color="primary" block>修改密码</v-btn>
+      <v-card>
+        <v-card-title>
+          <span class="headline">修改密码</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field label="新密码" required v-model="password1"></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field label="再次输入" required v-model="password2"></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" outline @click="submit" :disabled="!valid" block>确认</v-btn>
+          <v-btn flat @click="dialog=false" block>取消</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 

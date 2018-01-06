@@ -31,7 +31,6 @@
           </td>
           <v-dialog v-model="dialog" persistent max-width="400px">
             <v-btn slot="activator" outline @click="dialog=false;checkDetails(props.item.username)" primary block>详细信息</v-btn>
-            <div>
             <v-card>
               <v-card-title>
                 <span class="headline">与客户{{props.item.name}}的交易记录</span>
@@ -59,7 +58,6 @@
                 <v-btn flat @click="dialog=false" block>确认</v-btn>
               </v-card-actions>
             </v-card>
-            </div>
           </v-dialog>
         </tr>
       </template>
