@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vuex'
 import * as actionTypes from './action-types'
 import * as mutationTypes from './mutation-types'
 export default {
