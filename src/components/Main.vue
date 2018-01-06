@@ -21,7 +21,7 @@
 
       <v-list dense>
         <template v-for="(item, i) in items"
-                  v-if="item.visible">
+                  v-if="item.visible.includes(role)">
           <v-layout
             row
             v-if="item.heading"
@@ -83,9 +83,9 @@
                app
                clipped-left
                fixed>
-      <v-toolbar-title style="width: 240px; cursor:pointer" class="ml-0 pl-3" @click="goIndex">
+      <v-toolbar-title style="width: 240px; cursor:pointer" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        web development
+        {{ role + ': ' + profile.name}}
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -119,9 +119,9 @@
       return {
         drawer: true,
         items: [
-          {text: '我的信息', icon: 'person', href: '#/myInfo', visible: true},
-          {text: '商家列表', icon: 'shopping_cart', href: '#/merchants', visible: true},
-          {text: '客户列表', icon: 'people', href: '#/customers', visible: true}
+          {text: '我的信息', icon: 'person', href: '#/myInfo', visible: 'customer|merchant'},
+          {text: '商家列表', icon: 'shopping_cart', href: '#/merchants', visible: 'customer|administrator'},
+          {text: '客户列表', icon: 'people', href: '#/customers', visible: 'merchant|administrator'}
         ],
         mini: true
       }
@@ -135,7 +135,8 @@
       ...mapGetters({
         profile: 'getProfile',
         isAuthenticated: 'getAuthenticated',
-        snackBar: 'snackBar'
+        snackBar: 'snackBar',
+        role: 'getRole'
       })
     },
     methods: {
@@ -143,9 +144,6 @@
         showSnackBar: messageAction.SHOW_SNACK_BAR,
         logout: 'logout'
       }),
-      goIndex () {
-        this.$router.push({name: 'Main'})
-      },
       LogOut () {
         this.logout()
         this.$router.push({name: 'login'})

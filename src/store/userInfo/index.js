@@ -3,7 +3,7 @@ import Vue from 'vue'
 export default{
   state: {
     Authenticated: false,
-    role: 'customer',
+    role: 'administrator',
     username: 'myusername',
     profile: {
       name: 'zwl',

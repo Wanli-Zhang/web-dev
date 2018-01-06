@@ -77,27 +77,12 @@
       </v-edit-dialog>
       <span class="mr-5" v-if="role==='customer'"> {{address}} </span>
 
-      <v-edit-dialog
-        v-if="role==='merchant'"
-        @open="kindTemp=kind"
-        @save="editKind(kindTemp)"
-        large
-        lazy>
-        <v-tooltip top v-if="kind">
-          <v-btn icon slot="activator">
-            <v-icon class="grey--text">class</v-icon>
-          </v-btn>
-          <span> 商店种类 </span>
-        </v-tooltip>
-        <div slot="input" class="mt-4 title">商店种类</div>
-        <v-text-field
-          slot="input"
-          label="kind"
-          v-model="kindTemp"
-          single-line
-          autofocux>
-        </v-text-field>
-      </v-edit-dialog>
+      <v-tooltip top v-if="kind">
+        <v-btn icon slot="activator">
+          <v-icon class="grey--text">class</v-icon>
+        </v-btn>
+        <span> 商店种类 </span>
+      </v-tooltip>
       <span class="mr-5" v-if="role==='merchant'"> {{kind}} </span>
 
       <v-tooltip top>
@@ -210,19 +195,19 @@
           })
         } else if (this.password1.match(/^[A-Z]*$/g)) {
           this.showSnackBar({
-            text: '密码不能全为大写',
+            text: '密码不能全为大写字母',
             context: 'error',
             show: true
           })
         } else if (this.password1.match(/^[a-z]*$/g)) {
           this.showSnackBar({
-            text: '密码不能全为小写',
+            text: '密码不能全为小写字母',
             context: 'error',
             show: true
           })
         } else if (!this.password1.match(/[0-9].*[0-9]/g)) {
           this.showSnackBar({
-            text: '密码需包含一位以上数字',
+            text: '密码需至少包含两位数字',
             context: 'error',
             show: true
           })

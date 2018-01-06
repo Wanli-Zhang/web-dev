@@ -1,4 +1,5 @@
-import Vue from 'vuex'
+import Vue from 'vue'
+import * as actionTypes from './action-types'
 export default {
   state: {
     merchants: [
@@ -34,10 +35,13 @@ export default {
     },
     setCustomers: (state, customers) => {
       state.customers = customers
+    },
+    addMerchant: (state, merchant) => {
+      state.merchants.push(merchant)
     }
   },
   actions: {
-    fetchMerchants: ({commit}) => {
+    [actionTypes.FETCH_MERCHANTS]: ({commit}) => {
       return new Promise((resolve, reject) => {
         Vue.axios.get('/merchants').then(res => {
           if (res.data.err_code === 0) {
@@ -48,11 +52,44 @@ export default {
         })
       })
     },
-    fetchCustomers: ({commit}) => {
+    [actionTypes.FETCH_CUSTOMERS]: ({commit}) => {
       return new Promise((resolve, reject) => {
         Vue.axios.get('/customers').then(res => {
           if (res.data.err_code === 0) {
             commit('setCustomer', res.data.data)
+          } else {
+            reject(res.data.err_msg)
+          }
+        })
+      })
+    },
+    [actionTypes.ADD_MERCHANT]: ({commit}, merchant) => {
+      return new Promise((resolve, reject) => {
+        Vue.axios.post('/merchants', merchant).then(res => {
+          if (res.data.err_code === 0) {
+            commit('addMerchant', merchant)
+          } else {
+            reject(res.data.err_msg)
+          }
+        })
+      })
+    },
+    [actionTypes.DELETE_MERCHANT]: ({commit}, mUsername) => {
+      return new Promise((resole, reject) => {
+        Vue.axios.delete(`/merchant/${mUsername}`).then(res => {
+          if (res.data.err_code === 0) {
+            commit('deleteMerchant', mUsername)
+          } else {
+            reject(res.data.err_msg)
+          }
+        })
+      })
+    },
+    [actionTypes.UPDATE_MERCHANT]: ({commit}, mUsername, merchant) => {
+      return new Promise((resolve, reject) => {
+        Vue.axios.put(`/merchant/${mUsername}`).then(res => {
+          if (res.data.err_code === 0) {
+            commit('updateMerchant', mUsername, merchant)
           } else {
             reject(res.data.err_msg)
           }
