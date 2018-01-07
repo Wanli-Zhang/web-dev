@@ -11,7 +11,7 @@
 ### 2. 具体请求及返回格式
 #### 1. 登录
 URL：/login
-方式：GET
+方式：POST
 传入格式：
 ```json
 {
@@ -66,6 +66,7 @@ URL：/customers (新增商家改为 merchants)
 ```json
 {
 	username: string
+	password: string
 	name: string
 	level: int (普通客户为 0，大客户为 1，钻石客户为 2)
 	phone: string

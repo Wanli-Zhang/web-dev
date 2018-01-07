@@ -3,8 +3,9 @@ import Vue from 'vue'
 export default{
   state: {
     Authenticated: false,
-    role: 'administrator',
+    role: 'customer',
     username: 'myusername',
+    password: '11111111',
     profile: {
       name: 'zwl',
       level: 1,
@@ -26,6 +27,9 @@ export default{
     },
     getUsername: (state) => {
       return state.username
+    },
+    getPassword: (state) => {
+      return state.password
     }
   },
   mutations: {
@@ -40,6 +44,9 @@ export default{
     },
     setUsername: (state, payload) => {
       state.username = payload.username
+    },
+    setPassword: (state, payload) => {
+      state.password = payload.password
     }
   },
   actions: {
@@ -49,9 +56,10 @@ export default{
           if (res.data.err_code === 0) {
             commit('setRole', {role: payload.role})
             commit('setUsername', {username: payload.username})
+            commit('setPassword', {password: payload.password})
             commit('setAuthenticated', {Authenticated: true})
             commit('setProfile', {profile: res.data.data})
-            resolve(res.data.data)
+            resolve()
           } else {
             reject(res.data.err_msg)
           }

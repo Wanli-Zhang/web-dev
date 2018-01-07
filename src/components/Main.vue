@@ -85,7 +85,7 @@
                fixed>
       <v-toolbar-title style="width: 240px; cursor:pointer" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        {{ role + ': ' + profile.name}}
+        {{ role2Chinese() + ': ' + profile.name}}
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -128,9 +128,9 @@
       }
     },
     created () {
-      // if (!this.isAuthenticated) {
-      //   this.$router.push({name: 'login'})
-      // }
+      if (!this.isAuthenticated) {
+        this.$router.push({name: 'Login'})
+      }
     },
     computed: {
       ...mapGetters({
@@ -148,6 +148,15 @@
       LogOut () {
         this.logout()
         this.$router.push({name: 'login'})
+      },
+      role2Chinese () {
+        if (this.role === 'customer') {
+          return '客户'
+        } else if (this.role === 'merchant') {
+          return '商家'
+        } else {
+          return '管理员'
+        }
       }
     }
   }

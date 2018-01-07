@@ -5,6 +5,7 @@ import Login from '../components/Login.vue'
 import MyInfo from '../components/MyInfo'
 import Merchants from '../components/Merchants.vue'
 import Customers from '../components/Customers'
+import TransHistory from '../components/TransHistory'
 
 Vue.use(Router)
 
@@ -12,28 +13,33 @@ export default new Router({
   routes: [
     {
       path: '/login',
-      name: 'login',
+      name: 'Login',
       component: Login
     },
     {
       path: '/',
-      name: 'main',
+      name: 'Main',
       component: Main,
       children: [
         {
           path: 'myInfo',
-          name: 'myInfo',
+          name: 'MyInfo',
           component: MyInfo
         },
         {
           path: 'merchants',
-          name: 'merchants',
+          name: 'Merchants',
           component: Merchants
         },
         {
           path: 'customers',
-          name: 'customers',
+          name: 'Customers',
           component: Customers
+        },
+        {
+          path: 'customers/:cUsername/transHistory',
+          name: 'TransHistory',
+          component: TransHistory
         }
       ]
     }

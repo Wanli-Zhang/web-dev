@@ -92,10 +92,10 @@
           <td>
             {{ new Date(props.item.create_time).toLocaleDateString() }}
           </td>
-          <v-dialog v-model="dialog"
+          <v-dialog v-model="transDialog"
                     max-width="400px"
                     v-if="role==='customer'">
-            <v-btn slot="activator" outline primary block>新建交易</v-btn>
+            <v-btn slot="activator" outline primary block>付款</v-btn>
             <v-card>
               <v-card-title>
                 <span class="headline">商家：{{props.item.name}}</span>
@@ -112,19 +112,16 @@
                 </v-container>
               </v-card-text>
               <v-card-actions>
-                <v-btn flat @click="dialog=false" block>取消</v-btn>
+                <v-btn flat @click="transDialog=false" block>取消</v-btn>
                 <v-btn color="primary" outline block
-                       @click="dialog=false;newTrans(props.item.username, amount)">
-                  确认
-                </v-btn>
+                       @click="newTrans(props.item.username, amount)">确认</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-btn flat block
+          <v-btn flat icon
                  @click="delMerchant(props.item.username)"
                  v-if="role==='administrator'">
             <v-icon>delete</v-icon>
-            删除
           </v-btn>
         </tr>
       </template>
@@ -137,12 +134,12 @@
         </td>
       </template>
     </v-data-table>
-    <v-dialog v-model="dialog2" persistent max-width="400px"
+    <v-dialog v-model="newDialog" persistent max-width="400px"
               v-if="role==='administrator'">
       <v-btn color="primary" outline slot="activator" block>
         <v-icon>add</v-icon>
         新增商店
-        </v-btn>
+      </v-btn>
       <v-card>
         <v-card-title>
           <span class="headline">新增商店</span>
@@ -207,8 +204,8 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
+          <v-btn flat @click="newDialog=false" block>取消</v-btn>
           <v-btn color="primary" outline @click="newMerchant()" block>确认</v-btn>
-          <v-btn flat @click="dialog2=false" block>取消</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -242,14 +239,14 @@
           { text: '普通商店', value: 1 },
           { text: '旗舰商店', value: 2 }
         ],
-        dialog: false,
+        transDialog: false,
         levelDialog: false,
         amount: null,
         nameTmp: '',
         kindTmp: '',
         phoneTmp: '',
         levelTmp: '',
-        dialog2: false,
+        newDialog: false,
         newUsername: '',
         newPassword: '',
         newName: '',
@@ -263,7 +260,7 @@
           (v) => v && v.length <= 20 || '用户名不得超过20位'
         ],
         nameRules: [
-          (v) => !!v || '请输入上商店名称',
+          (v) => !!v || '请输入商店名称',
           (v) => v && v.length <= 20 || '商店名称不得超过20位'
         ],
         passwordRules: [
@@ -284,7 +281,13 @@
       }
     },
     created () {
-      // this.fetchMerchants()
+      this.fetchMerchants().then(() => {}, (err) => {
+        this.showSnackBar({
+          text: err,
+          context: 'error',
+          show: true
+        })
+      })
     },
     computed: {
       // 去/store获取信息
@@ -316,6 +319,7 @@
           trans_amount: amount
         }).then((res) => {
           if (res.data.err_code === 0) {
+            this.transDialog = false
             this.showSnackBar({
               text: '交易成功',
               context: 'success',
@@ -424,7 +428,6 @@
             }
           })
           if (dupUsername) return
-          this.dialog2 = false
           this.addMerchant({
             username: this.newUsername,
             password: this.newPassword,
@@ -433,6 +436,7 @@
             phone: this.newPhone,
             kind: this.newKind
           }).then(() => {
+            this.newDialog = false
             this.showSnackBar({
               text: '添加成功',
               context: 'success',
