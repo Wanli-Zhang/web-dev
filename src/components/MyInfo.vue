@@ -203,9 +203,7 @@
           rowsPerPage: -1,
           sortBy: 'username'
         },
-        admins: [
-          'aaa', 'bbb'
-        ],
+        admins: [],
         name: '',
         level: '',
         phone: '',

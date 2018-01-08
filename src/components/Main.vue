@@ -85,7 +85,7 @@
                fixed>
       <v-toolbar-title style="width: 240px; cursor:pointer" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        {{ role2Chinese() + ': ' + profile.name}}
+        {{ role2Chinese() + ': ' + profile.name? profile.name : username}}
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -136,6 +136,7 @@
       ...mapGetters({
         profile: 'getProfile',
         isAuthenticated: 'getAuthenticated',
+        username: 'getUsername',
         snackBar: 'snackBar',
         role: 'getRole'
       })

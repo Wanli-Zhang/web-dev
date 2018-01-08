@@ -3,41 +3,8 @@ import * as actionTypes from './action-types'
 import * as mutationTypes from './mutation-types'
 export default {
   state: {
-    merchants: [
-      {
-        username: 'abcd',
-        name: 'merchant1',
-        level: 1,
-        phone: '123456',
-        kind: 'heihei',
-        create_time: new Date()
-      },
-      {
-        username: 'xyz',
-        name: 'merchant2',
-        level: 2,
-        phone: '654321',
-        kind: 'haha',
-        create_time: new Date()
-      }],
-    customers: [
-      {
-        username: 'abcd',
-        name: 'customer1',
-        level: 1,
-        phone: '123456',
-        address: 'heihei',
-        create_time: new Date()
-      },
-      {
-        username: 'xyz',
-        name: 'customer2',
-        level: 2,
-        phone: '654321',
-        address: 'haha',
-        create_time: new Date()
-      }
-    ]
+    merchants: [],
+    customers: []
   },
   getters: {
     getMerchants: (state) => {

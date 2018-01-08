@@ -3,17 +3,10 @@ import Vue from 'vue'
 export default{
   state: {
     Authenticated: false,
-    role: 'customer',
-    username: 'myusername',
-    password: '11111111',
-    profile: {
-      name: 'zwl',
-      level: 1,
-      phone: 12345678901,
-      address: 'fffffuck',
-      create_time: new Date().getTime(),
-      kind: 'fffff'
-    }
+    role: '',
+    username: '',
+    password: '',
+    profile: {}
   },
   getters: {
     getProfile: (state) => {
@@ -64,7 +57,7 @@ export default{
             reject(res.data.err_msg)
           }
         }, (err) => {
-          console.log(err)
+          console.log()
           reject(err)
         }).catch((e) => {
           console.log(e)
