@@ -78,7 +78,7 @@ export default {
   actions: {
     [actionTypes.FETCH_MERCHANTS]: ({commit}) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.get('/merchants').then(res => {
+        Vue.axios.get('/webapi/v1/merchants').then(res => {
           if (res.data.err_code === 0) {
             commit(mutationTypes.SET_MERCHANTS, res.data.data)
           } else {
@@ -89,7 +89,7 @@ export default {
     },
     [actionTypes.FETCH_CUSTOMERS]: ({commit}) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.get('/customers').then(res => {
+        Vue.axios.get('/webapi/v1/customers').then(res => {
           if (res.data.err_code === 0) {
             commit(mutationTypes.SET_CUSTOMERS, res.data.data)
           } else {
@@ -100,7 +100,7 @@ export default {
     },
     [actionTypes.FETCH_CUSTOMERS_OF_MERCHANT]: ({commit}, mUsername) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.get(`/merchant/${mUsername}/customers`).then(res => {
+        Vue.axios.get(`/webapi/v1/merchant/${mUsername}/customers`).then(res => {
           if (res.data.err_code === 0) {
             commit(mutationTypes.SET_CUSTOMERS, res.data.data)
           } else {
@@ -111,7 +111,7 @@ export default {
     },
     [actionTypes.ADD_MERCHANT]: ({commit}, merchant) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.post('/merchants', merchant).then(res => {
+        Vue.axios.post('/webapi/v1/merchants', merchant).then(res => {
           if (res.data.err_code === 0) {
             merchant.create_time = new Date().getTime()
             commit(mutationTypes.ADD_MERCHANT, merchant)
@@ -124,7 +124,7 @@ export default {
     },
     [actionTypes.ADD_CUSTOMER]: ({commit}, customer) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.post('/customers', customer).then(res => {
+        Vue.axios.post('/webapi/v1/customers', customer).then(res => {
           if (res.data.err_code === 0) {
             customer.create_time = new Date().getTime()
             commit(mutationTypes.ADD_CUSTOMER, customer)
@@ -137,7 +137,7 @@ export default {
     },
     [actionTypes.DELETE_MERCHANT]: ({commit}, mUsername) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.delete(`/merchant/${mUsername}`).then(res => {
+        Vue.axios.delete(`/webapi/v1/merchant/${mUsername}`).then(res => {
           if (res.data.err_code === 0) {
             commit(mutationTypes.DELETE_MERCHANT, mUsername)
             resolve()
@@ -149,7 +149,7 @@ export default {
     },
     [actionTypes.DELETE_CUSTOMER]: ({commit}, mUsername) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.delete(`/customer/${mUsername}`).then(res => {
+        Vue.axios.delete(`/webapi/v1/customer/${mUsername}`).then(res => {
           if (res.data.err_code === 0) {
             commit(mutationTypes.DELETE_CUSTOMER, mUsername)
             resolve()
@@ -161,7 +161,7 @@ export default {
     },
     [actionTypes.UPDATE_MERCHANT]: ({commit}, merchant) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.put(`/merchant/${merchant.username}`).then(res => {
+        Vue.axios.put(`/webapi/v1/merchant/${merchant.username}`).then(res => {
           if (res.data.err_code === 0) {
             commit(mutationTypes.UPDATE_MERCHANT, merchant)
             resolve()
@@ -173,7 +173,7 @@ export default {
     },
     [actionTypes.UPDATE_CUSTOMER]: ({commit}, customer) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.put(`/customer/${customer.username}`).then(res => {
+        Vue.axios.put(`/webapi/v1/customer/${customer.username}`).then(res => {
           if (res.data.err_code === 0) {
             commit(mutationTypes.UPDATE_CUSTOMER, customer)
             resolve()

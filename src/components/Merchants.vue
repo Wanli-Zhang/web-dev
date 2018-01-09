@@ -315,7 +315,7 @@
         }
       },
       newTrans (mUsername, amount) {
-        this.axios.post(`/merchant/${mUsername}/customer/${this.username}`, {
+        this.axios.post(`/webapi/v1/merchant/${mUsername}/customer/${this.username}`, {
           trans_amount: amount
         }).then((res) => {
           if (res.data.err_code === 0) {

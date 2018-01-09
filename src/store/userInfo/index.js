@@ -45,7 +45,7 @@ export default{
   actions: {
     login: ({commit}, payload) => {
       return new Promise((resolve, reject) => {
-        Vue.axios.post(`/login`, payload).then(res => {
+        Vue.axios.post(`/webapi/v1/login`, payload).then(res => {
           if (res.data.err_code === 0) {
             commit('setRole', {role: payload.role})
             commit('setUsername', {username: payload.username})
