@@ -3,7 +3,7 @@ import Axios from 'axios'
 import VueAxios from 'vue-axios'
 
 export default class Config {
-  static SERVER_URL = 'http://localhost:9898'
+  static SERVER_URL = 'http://172.20.10.2:9898'
 }
 
 Vue.use(VueAxios, Axios)

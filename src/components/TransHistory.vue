@@ -36,7 +36,7 @@
       }
     },
     created () {
-      this.axios.get(`/webapi/v1/merchant/${this.username}/customer/${this.cUsername}`).then(res => {
+      this.axios.get(`/webapi/v1/merchant/${this.username}/customer/${this.cUsername}`, {withCredentials: false}).then(res => {
         if (res.data.err_code === 0) {
           this.transHistory = res.data.data
         }

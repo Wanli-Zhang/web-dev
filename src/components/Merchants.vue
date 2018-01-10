@@ -90,7 +90,7 @@
           </td>
 
           <td>
-            {{ new Date(props.item.create_time).toLocaleDateString() }}
+            {{ new Date(props.item.create_time * 1000).toLocaleDateString() }}
           </td>
           <v-dialog v-model="transDialog"
                     max-width="400px"
@@ -281,7 +281,9 @@
       }
     },
     created () {
-      this.fetchMerchants().then(() => {}, (err) => {
+      this.fetchMerchants().then(() => {
+        console.log(this.merchants)
+      }, (err) => {
         this.showSnackBar({
           text: err,
           context: 'error',
@@ -303,7 +305,8 @@
         fetchMerchants: bizAction.FETCH_MERCHANTS,
         addMerchant: bizAction.ADD_MERCHANT,
         deleteMerchant: bizAction.DELETE_MERCHANT,
-        updateMerchant: bizAction.UPDATE_MERCHANT
+        updateMerchant: bizAction.UPDATE_MERCHANT,
+        login: 'login'
       }),
       toLevel (level) {
         if (level === 0) {
@@ -317,7 +320,7 @@
       newTrans (mUsername, amount) {
         this.axios.post(`/webapi/v1/merchant/${mUsername}/customer/${this.username}`, {
           trans_amount: amount
-        }).then((res) => {
+        }, {withCredentials: false}).then((res) => {
           if (res.data.err_code === 0) {
             this.transDialog = false
             this.showSnackBar({

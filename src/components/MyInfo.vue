@@ -247,7 +247,7 @@
     },
     created () {
       if (this.role === 'administrator') {
-        this.axios.get('/webapi/v1/administrators').then(res => {
+        this.axios.get('/webapi/v1/administrators', {withCredentials: false}).then(res => {
           if (res.data.err_code === 0) {
             this.admins = res.data.data
           } else {
@@ -294,7 +294,7 @@
           } else {
             this.axios.put(`/webapi/v1/${this.role}/${this.username}`, {
               password: this.editPassword1
-            }).then((res) => {
+            }, {withCredentials: false}).then((res) => {
               if (res.data.err_code === 0) {
                 this.editDialog = false
                 this.showSnackBar({
@@ -336,7 +336,7 @@
       editName (name) {
         this.axios.put(`/webapi/v1/${this.role}/${this.username}`, {
           name: name
-        }).then((res) => {
+        }, {withCredentials: false}).then((res) => {
           if (res.data.err_code === 0) {
             this.name = name
             this.showSnackBar({
@@ -362,7 +362,7 @@
       editPhone (phone) {
         this.axios.put(`/webapi/v1/${this.role}/${this.username}`, {
           phone: phone
-        }).then((res) => {
+        }, {withCredentials: false}).then((res) => {
           if (res.data.err_code === 0) {
             this.phone = phone
             this.showSnackBar({
@@ -388,7 +388,7 @@
       editAddress (address) {
         this.axios.put(`/webapi/v1/${this.role}/${this.username}`, {
           address: address
-        }).then((res) => {
+        }, {withCredentials: false}).then((res) => {
           if (res.data.err_code === 0) {
             this.address = address
             this.showSnackBar({
@@ -414,7 +414,7 @@
       editKind (kind) {
         this.axios.put(`/webapi/v1/${this.role}/${this.username}`, {
           kind: kind
-        }).then((res) => {
+        }, {withCredentials: false}).then((res) => {
           if (res.data.err_code === 0) {
             this.kind = kind
             this.showSnackBar({
@@ -439,7 +439,7 @@
       },
       delAdmin (aUsername) {
         let self = this
-        this.axios.delete(`/webapi/v1/administrator/${aUsername}`).then(res => {
+        this.axios.delete(`/webapi/v1/administrator/${aUsername}`, {withCredentials: false}).then(res => {
           if (res.data.err_code === 0) {
             let index = self.admins.findIndex(admin => admin === aUsername)
             self.admins.splice(index, 1)
@@ -470,7 +470,7 @@
           let newAdmin
           newAdmin.username = this.newUsername
           newAdmin.password = this.newPassword1
-          this.axios.post('/webapi/v1/administrators', newAdmin).then(res => {
+          this.axios.post('/webapi/v1/administrators', newAdmin, {withCredentials: false}).then(res => {
             if (res.data.err_code === 0) {
               this.admins.push(self.newUsername)
               this.newDialog = false

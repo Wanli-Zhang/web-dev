@@ -128,6 +128,7 @@
       }
     },
     created () {
+      console.log('authenticated=' + this.isAuthenticated)
       if (!this.isAuthenticated) {
         this.$router.push({name: 'Login'})
       }
@@ -148,7 +149,7 @@
       }),
       LogOut () {
         this.logout()
-        this.$router.push({name: 'login'})
+        this.$router.push({name: 'Login'})
       },
       role2Chinese () {
         if (this.role === 'customer') {
