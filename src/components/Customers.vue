@@ -13,9 +13,9 @@
           <td>{{ toLevel(props.item.level) }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.address }}</td>
-          <td>{{ new Date(props.item.create_time).toLocaleDateString() }}</td>
-          <td>{{ props.item.trans_amount }}</td>
-          <td>{{ props.item.trans_count }}</td>
+          <td>{{ new Date(props.item.create_time * 1000).toLocaleDateString() }}</td>
+          <td>{{ props.item.total_amount }}</td>
+          <td>{{ props.item.total_count }}</td>
           <td>
             <v-btn outline primary
                    @click="goTransHistory(props.item.username)">
@@ -37,7 +37,7 @@
           <td>{{ toLevel(props.item.level) }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.address }}</td>
-          <td>{{ new Date(props.item.create_time).toLocaleDateString() }}</td>
+          <td>{{ new Date(props.item.create_time * 1000).toLocaleDateString() }}</td>
           <v-btn primary icon outline
                  @click.stop="openEditDialog(props.item)">
             <v-icon>edit</v-icon>
